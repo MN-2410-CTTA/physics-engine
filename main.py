@@ -6,35 +6,32 @@ pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 running = True
-dt = 0
 
-a = 1000
-u = -500
-box = [639, 620, 100, 100]
+gravity = 1000 # change gravity
+velocity_y = -100 #change starting velocity
+box = [590, 0, 100, 50] # change pos y, pos x, size x, and size y
 
 while running:
-    dt = clock.tick(165) / 1000
+    # math
+    dt = clock.tick(165) / 1000 # tick(x) is the framerate
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
     
-    pygame.draw.rect(screen, color="black", rect=box)
-    pos = box[1]
-    box[1] += 0.5 * (u + u + (a * dt)) * dt
-    u =  (box[1] - pos) / dt
+    if box[1] <= (620-box[3]): 
+        velocity_y += gravity * dt
+    else:
+        velocity_y = 0
 
-    
+    box[1] += velocity_y * dt
 
-    # fill the screen with a color to wipe away anything from last frame
+    # renderer
+    # renders sky first, then ground, and then the object
     screen.fill("#87CEEB")
-
-    
-
-    # flip() the display to put your work on screen
-    
-
-    
+    pygame.draw.rect(screen, color="black", rect=(0, 620, 1280, 100))
+    pygame.draw.rect(screen, color="black", rect=box)
 
     pygame.display.flip()
+
 pygame.quit()
